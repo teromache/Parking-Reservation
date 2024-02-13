@@ -12,8 +12,8 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
-        <a class="nav-link" href="index.html">
+    <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -22,10 +22,10 @@
     <hr class="sidebar-divider">
 
     <!-- Nav Item - Tables -->
-    <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Tables</span></a>
+    <li class="nav-item {{ request()->routeIs('reserve') ? 'active' : '' }}"">
+        <a class="nav-link" href="{{ route('reserve') }}">
+            <i class="fas fa-parking"></i>
+            <span>Reserve Parking Spot</span></a>
     </li>
 
     <!-- Divider -->
