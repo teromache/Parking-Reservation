@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReserveController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,18 @@ use App\Http\Controllers\ReserveController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/', [AuthController::class, 'index'])->name('login.page');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('/reserve',[ReserveController::class,'index'])->name('reserve');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/reserve', [ReserveController::class, 'index'])->name('reserve');
+    Route::post('/reserve_booking', [ReserveController::class, 'reserve'])->name('reserve.booking');
+});
+
+Route::fallback(function () {
+    if (!auth()->check()) {
+        return redirect()->route('login.page');
+    }
+});
