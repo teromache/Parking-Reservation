@@ -15,7 +15,7 @@
     <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
+            <span>Current Reservation</span></a>
     </li>
 
     <!-- Divider -->
@@ -23,9 +23,9 @@
 
     <!-- Nav Item - Tables -->
     <li class="nav-item {{ request()->routeIs('reserve') ? 'active' : '' }}"">
-        <a class="nav-link" href="{{ route('reserve') }}">
-            <i class="fas fa-parking"></i>
-            <span>Reserve Parking Spot</span></a>
+        <a class=" nav-link" href="{{ route('reserve') }}">
+        <i class="fas fa-parking"></i>
+        <span>Reserve Parking Spot</span></a>
     </li>
 
     <!-- Divider -->

@@ -1,0 +1,86 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use GuzzleHttp\Psr7\Query;
+use App\Models\ParkingSpot;
+use App\Models\Reservation;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Database\QueryException;
+
+class ReserveController extends Controller
+{
+    public function index()
+    {
+        return view('parking/reserve');
+    }
+
+    public function checkParking(Request $request)
+    {
+        try {
+            $availableSpot = ParkingSpot::where('availability', true)->where('size', (int) $request->size)->first();
+
+            $time_from = strtotime($request->time_from);
+            $time_to = strtotime($request->time_to);
+
+            session(['spot_id' => '123']);
+
+            $duration_seconds = $time_to - $time_from;
+
+            $duration_hours = $duration_seconds / 3600;
+
+            $price = 0;
+            if ($request->size == 1) {
+                $price = 3.50;
+            } elseif ($request->size == 1) {
+                $price = 4.50;
+            } else {
+                $price = 5.50;
+            }
+
+            $amount = round($price * $duration_hours, 2);
+
+            if ($availableSpot) {
+                if ($availableSpot) {
+                    return redirect()->route('reserve')
+                        ->with([
+                            'success' => 'Success Booking',
+                            'price' => $amount,
+                            'time_from' => $request->time_from,
+                            'spot_id' => $availableSpot->id,
+                        ]);
+                }
+            } else {
+                return redirect()->back()->with('error', 'No available parking spots.');
+            }
+
+            // $user = auth()->user();
+
+            // $data = new Reservation();
+            // $data->id = Str::uuid();
+            // $data->user_id = $user->id;
+            // $data->parking_spot_id = $availableSpot->id;
+            // $data->date = $request->date;
+            // $data->time_from = $request->time_from;
+            // $data->time_to = $request->time_to;
+
+            // $data->save();
+
+            // $availableSpot->availability = false;
+            // $availableSpot->save();
+        } catch (QueryException $e) {
+            Log::error('Failed to save transaction: ' . $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function payment()
+    {
+        $spotId = session('spot_id');
+        dd($spotId);
+    }
+}

@@ -3,7 +3,7 @@
 @section('content')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Current Reservation</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Reserve Parking Spot</li>
         </ol>
     </nav>
@@ -39,27 +39,32 @@
                 }).then((result) => {
                     // If user clicks on "Proceed to payment"
                     if (result.isConfirmed) {
-                        // Redirect to the payment page
-                        window.location.href = '{{ route('payment.index') }}';
-                    } else {
-                        // If user cancels, terminate session
+                        var spotId = "{{ session('spot_id') }}";
+                        // Redirect to payment page or proceed with payment process
                         $.ajax({
-                            url: '{{ route('terminate.session') }}',
-                            type: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            url: '{{ route('payment.index') }}',
+                            data: {
+                                spot_id: spotId,
                             },
+                            type: 'GET',
                             success: function(response) {
-                                console.log("Session terminated successfully");
+                                // Redirect to the payment page
+                                window.location.href = '{{ route('payment.index') }}';
                             },
                             error: function(xhr, status, error) {
-                                console.error("Failed to terminate session:", error);
+                                // Handle error
+                                alert('Error: ' + error);
                             }
                         });
+                    } else {
+                        // Handle cancellation if needed
+                        // For example, redirect back to the previous page
+                        window.history.back();
                     }
                 });
             </script>
         @endif
+
         <div class="card-body">
             <div class="card">
                 <div class="card-body">
@@ -171,10 +176,18 @@
                             </div>
                         </div>
 
+                        <input id="test" type="hidden" name="test"
+                            value="{{ isset($time_from) ? $time_from : null }}">
+                        <input type="hidden" name="spot_id" value="{{ session('spot_id') }}">
+
                         <div class="float-left">
-                            <button type="submit" class="btn btn-primary">Check Availability</button>
+                            <button type="submit" class="btn btn-primary btn-md">
+                                <i class="fas fa-check"></i> Book Now
+                            </button>
                         </div>
+
                     </form>
+
                 </div>
             </div>
         </div>

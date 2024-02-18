@@ -1,5 +1,69 @@
-.reserve-title {
-font-family: "Arial", sans-serif;
-text-transform: uppercase;
-font-size: 1.5rem;
+
+.cardStyle {
+    width:340px;
+    border-radius:12px;
+  }
+
+  .selectBox {
+    border:1px solid #222;
+    width:24px;
+    height:24px;
+    text-align:center;
+    border-radius:50%;
+    line-height:22px;
+    font-size:12px;
+  }
+  .selected {
+    color:#fff;
+    border:1px solid #f7f7f7 !important;
+  }
+  small {
+    font-size:12px;
+    letter-spacing:1px;
+  }
+  label,
+  h6 {
+    font-size:12px;
+    text-transform : uppercase;
+    color:#aaaaaa
+  }
+  a.btn {
+    line-height:32px;
+  }
+  a.btn,
+  button.btn,
+  select.form-control,
+  input.form-control {
+    height:48px;
+    border-radius:2px;
+  }
+
+  .body-main {
+    background: #ffffff;
+    border-bottom: 15px solid #1E1F23;
+    border-top: 15px solid #1E1F23;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 40px 30px !important;
+    position: relative ;
+    box-shadow: 0 1px 21px #808080;
+    font-size:10px;
+
+}
+
+.main thead {
+    background: #1E1F23;
+    color: #fff;
+    }
+.img{
+    height: 100px;}
+h1{
+   text-align: center;
+}
+
+.custom-body {
+    background-image: url('img/invoice_bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }

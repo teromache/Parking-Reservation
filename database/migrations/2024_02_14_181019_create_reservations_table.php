@@ -11,6 +11,7 @@ class CreateReservationsTable extends Migration
         Schema::create('reservations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $table->string('name');
             $table->foreignUuid('parking_spot_id')->constrained()->onDelete('cascade');
             $table->date('date');
             $table->time('time_from');

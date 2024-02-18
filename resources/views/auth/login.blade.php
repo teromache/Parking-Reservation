@@ -59,7 +59,7 @@
                                     </script>
                                     @endif
 
-                                    <form action="{{ route('login') }}" method="post" class="user">
+                                    <form action="{{ route('login.function') }}" method="post" class="user">
                                         @csrf
                                         <div class="form-group">
                                             <input name="email" type="email" class="form-control form-control-user"

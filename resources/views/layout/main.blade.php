@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Parking Reservation Wan Putera</title>
 
@@ -19,10 +20,20 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <!-- <link href="{{ asset('css/style.css') }}" rel="stylesheet"> -->
+
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     <!-- SweetAlert scripts -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <style>
+        .reserve-title {
+            font-family: "Arial", sans-serif;
+            text-transform: uppercase;
+            font-size: 1.5rem;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -92,7 +103,10 @@
     <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
 
     <!-- Page level custom scripts -->
-    <script src="{{ asset('js/sweetalert.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
+
+    <!-- Stripe Payment Gateaway -->
+
 
 </body>
 
