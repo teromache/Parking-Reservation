@@ -31,4 +31,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cancel', [ReserveController::class, 'cancelIndex'])->name('cancel.index');
     Route::post('/cancel/check', [ReserveController::class, 'checkReservation'])->name('cancel.check');
     Route::post('/cancel/process/{id}', [ReserveController::class, 'cancelProcess'])->name('cancel.process');
+    Route::get('/available', [ReserveController::class, 'availableIndex'])->name('available.index');
+    Route::post('/available/process', [ReserveController::class, 'availableCheck'])->name('available.check');
 });

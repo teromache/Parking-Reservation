@@ -82,7 +82,7 @@ class ReserveController extends Controller
 
     public function reservation(Request $request)
     {
-        Stripe\Stripe::setApiKey('');
+        Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
         $price = session('price');
         $date = session('date');
@@ -139,7 +139,7 @@ class ReserveController extends Controller
             // $payment->save();
             // Payment successful, redirect back with success message
             // return back()->with('success', 'Payment successful!');
-            
+
             return redirect()->route('payment.receipt')->with('success', 'Payment Succes');
         } catch (\Exception $e) {
             // Handle any errors that occur during the charge creation
@@ -207,8 +207,41 @@ class ReserveController extends Controller
         $parkingSpot->availability = 1;
         $parkingSpot->update();
 
-
         return redirect()->route('cancel.index')->with('success', 'Reservation has been cancel');
+    }
+
+    public function availableIndex()
+    {
+        $available_data = ParkingSpot::whereNull('id')->get();
+
+        return view('parking.available')->with('available_data', $available_data);
+    }
+
+    public function availableCheck(Request $request)
+    {
+        $date = $request->date;
+        $time_from = $request->time_from;
+        $time_to = $request->time_to;
+
+        $reservedParkingSpotIds = Reservation::where('date', $date)
+            ->where(function ($query) use ($time_from, $time_to) {
+                $query
+                    ->where(function ($query) use ($time_from, $time_to) {
+                        $query->where('time_from', '<', $time_to)->where('time_to', '>', $time_from);
+                    })
+                    ->orWhere(function ($query) use ($time_from, $time_to) {
+                        $query->where('time_from', '>=', $time_from)->where('time_to', '<=', $time_to);
+                    });
+            })
+            ->pluck('parking_spot_id');
+
+        $allParkingSpotIds = ParkingSpot::pluck('id');
+
+        $availableParkingSpotIds = $allParkingSpotIds->diff($reservedParkingSpotIds);
+
+        $available_data = ParkingSpot::whereIn('id', $availableParkingSpotIds)->get();
+
+        return view('parking.available')->with('available_data', $available_data);
     }
 
     public function terminateSession()

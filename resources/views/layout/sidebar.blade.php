@@ -36,6 +36,14 @@
         <span>Cancel Reservation</span></a>
     </li>
 
+    <hr class="sidebar-divider">
+
+    <li class="nav-item {{ request()->routeIs('available.index') ? 'active' : '' }}"">
+        <a class=" nav-link" href="{{ route('available.index') }}">
+        <i class="fas fa-parking"></i>
+        <span>Check Available Spot</span></a>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 
