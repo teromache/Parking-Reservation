@@ -41,7 +41,7 @@
     <script>
         Swal.fire({
             icon: 'success',
-            title: 'Successfull!',
+            title: 'Success!',
             html: "The payment is success",
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',

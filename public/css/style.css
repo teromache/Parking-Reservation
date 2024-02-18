@@ -67,3 +67,12 @@ h1{
     background-position: center;
     background-repeat: no-repeat;
 }
+
+.primary-table {
+    color: #007bff; /* Text color */
+}
+
+.primary-table th,
+.primary-table td {
+    border-color: #007bff; /* Border color */
+}

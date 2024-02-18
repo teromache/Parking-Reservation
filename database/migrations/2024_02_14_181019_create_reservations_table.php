@@ -12,10 +12,12 @@ class CreateReservationsTable extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
+            $table->string('vehicle_number');
             $table->foreignUuid('parking_spot_id')->constrained()->onDelete('cascade');
             $table->date('date');
             $table->time('time_from');
             $table->time('time_to');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

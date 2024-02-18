@@ -28,4 +28,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/payment/reservation', [ReserveController::class, 'reservation'])->name('payment.reservation');
     Route::get('/payment/receipt', [ReserveController::class, 'receipt'])->name('payment.receipt');
     Route::post('/terminate/session', [ReserveController::class, 'terminateSession'])->name('terminate.session');
+    Route::get('/cancel', [ReserveController::class, 'cancelIndex'])->name('cancel.index');
+    Route::post('/cancel/check', [ReserveController::class, 'checkReservation'])->name('cancel.check');
+    Route::post('/cancel/process/{id}', [ReserveController::class, 'cancelProcess'])->name('cancel.process');
 });

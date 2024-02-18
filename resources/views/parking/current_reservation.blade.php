@@ -1,7 +1,6 @@
 @extends('layout.main')
 
 @section('content')
-<link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 <!-- Page Heading -->
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -18,40 +17,39 @@
         <div class="card">
             <div class="card-body">
                 <!-- Content Row -->
-                <div class="container">
-                    <div class="row mb-4 justify-content-center">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>No.</th>
-                                            <th>Name</th>
-                                            <th>Parking Name</th>
-                                            <th>Date</th>
-                                            <th>Time From</th>
-                                            <th>Time To</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php
-                                        $i = 1;
-                                        @endphp
-                                        @foreach ($current_reservation as $data)
-                                        <tr>
-                                            <td>{{ $i++ }}</td>
-                                            <td>$data->name</td>
-                                            <td>$data->parkingSpot->name</td>
-                                            <td>$data->date</td>
-                                            <td>$data->time_from</td>
-                                            <td>$data->time_to</td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0"
+                        class="table primary-table">
+                        <thead>
+                            <tr>
+                                <th style="background-color: #007bff;color: #fff;">No.</th>
+                                <th style="background-color: #007bff;color: #fff;">Name</th>
+                                <th style="background-color: #007bff;color: #fff;">Vehicle Registration</th>
+                                <th style="background-color: #007bff;color: #fff;">Date</th>
+                                <th style="background-color: #007bff;color: #fff;">Time From</th>
+                                <th style="background-color: #007bff;color: #fff;">Time To</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                            $i = 1;
+                            @endphp
+                            @forelse ($current_reservation as $data)
+                            <tr>
+                                <td>{{ $i++ }}</td>
+                                <td>{{ $data->name }}</td>
+                                <td>{{ $data->vehicle_number }}</td>
+                                <td>{{ $data->date }}</td>
+                                <td>{{ $data->time_from }}</td>
+                                <td>{{ $data->time_to }}</td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td style="text-align: center;" colspan="7">No data available</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

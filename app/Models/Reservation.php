@@ -4,18 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'user_id',
-        'parking_spot_id',
-        'date',
-        'time_from',
-        'time_to',
-    ];
+    protected $fillable = ['user_id', 'parking_spot_id', 'date', 'time_from', 'time_to'];
     protected $casts = [
         'id' => 'string',
     ];
@@ -33,7 +28,7 @@ class Reservation extends Model
 
     public function parkingSpot()
     {
-        return $this->belongsTo(ParkingSpot::class);
+        return $this->belongsTo(ParkingSpot::class, 'parking_spot_id', 'id');
     }
 
     public function payment()

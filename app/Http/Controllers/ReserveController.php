@@ -65,6 +65,7 @@ class ReserveController extends Controller
                 'time_to' => $request->time_to,
                 'available_spot' => $availableSpot,
                 'duration_hours' => $duration_hours,
+                'vehicle_number' => $request->vehicle_registration,
             ]);
 
             return redirect()->route('reserve');
@@ -81,7 +82,6 @@ class ReserveController extends Controller
 
     public function reservation(Request $request)
     {
-        // Set your Stripe secret key
         Stripe\Stripe::setApiKey('');
 
         $price = session('price');
@@ -90,14 +90,25 @@ class ReserveController extends Controller
         $time_to = session('time_to');
         $availableSpot = session('available_spot');
         $name = session('name');
+        $vehicle_number = session('vehicle_number');
 
         try {
+            $stripeToken = $request->input('stripeToken');
+
+            Stripe\Charge::create([
+                'amount' => $price * 100,
+                'currency' => 'myr',
+                'source' => $stripeToken,
+                'description' => 'Test payment from itsolutionstuff.com.',
+            ]);
+
             $user = auth()->user();
 
             $data = new Reservation();
             $data->id = Str::uuid();
             $data->user_id = $user->id;
             $data->name = $name;
+            $data->vehicle_number = $vehicle_number;
             $data->parking_spot_id = $availableSpot->id;
             $data->date = $date;
             $data->time_from = $time_from;
@@ -117,15 +128,6 @@ class ReserveController extends Controller
             $availableSpot->availability = false;
             $availableSpot->save();
 
-            $stripeToken = $request->input('stripeToken');
-
-            Stripe\Charge::create([
-                'amount' => $price * 100,
-                'currency' => 'myr',
-                'source' => $stripeToken,
-                'description' => 'Test payment from itsolutionstuff.com.',
-            ]);
-
             // $payment = new Payment();
             // $payment->id = Str::uuid();
             // $payment->reservation_id = $reservationId;
@@ -137,7 +139,8 @@ class ReserveController extends Controller
             // $payment->save();
             // Payment successful, redirect back with success message
             // return back()->with('success', 'Payment successful!');
-            return redirect()->route('payment.receipt')->with('success','Payment Succesfull');
+            
+            return redirect()->route('payment.receipt')->with('success', 'Payment Succes');
         } catch (\Exception $e) {
             // Handle any errors that occur during the charge creation
             return back()->with('error', $e->getMessage());
@@ -167,6 +170,45 @@ class ReserveController extends Controller
             'transaction_id' => $transactionId,
             'duration' => $duration,
         ]);
+    }
+
+    public function cancelIndex()
+    {
+        $name = null;
+        $date = null;
+
+        $cancel_data = Reservation::where('name', $name)->where('date', $date)->get();
+
+        return view('parking.cancel')->with('cancel_data', $cancel_data);
+    }
+
+    public function checkReservation(Request $request)
+    {
+        $name = $request->name;
+        $date = $request->date;
+
+        $cancel_data = Reservation::where('name', $name)->where('date', $date)->get();
+
+        if ($cancel_data->isEmpty()) {
+            return redirect()->back()->with('no_reservation', true);
+        }
+
+        return view('parking.cancel')->with('cancel_data', $cancel_data);
+    }
+
+    public function cancelProcess($id)
+    {
+        $reservation = Reservation::where('id', $id)->first();
+
+        $reservation->delete();
+
+        $parkingSpot = ParkingSpot::where('id', $reservation->parking_spot_id)->first();
+
+        $parkingSpot->availability = 1;
+        $parkingSpot->update();
+
+
+        return redirect()->route('cancel.index')->with('success', 'Reservation has been cancel');
     }
 
     public function terminateSession()
